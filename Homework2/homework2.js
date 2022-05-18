@@ -43,11 +43,11 @@ function init() {
     gl.enable(gl.DEPTH_TEST);
 
     camera = new Camera(gl,program);
-    camera.fovy = 90;
+    camera.fovy = 45;
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,0,-4);
+    camera.position= vec3(0,0,-10);
     //camera.rotate(vec3(1,0,0),45);
     var boxSize = 5;
     //camera.projectionMatrix = ortho(-boxSize,boxSize,-boxSize,boxSize,-boxSize,boxSize);
@@ -56,7 +56,14 @@ function init() {
     Torso.mesh = new Cube(gl,program);
     Torso.mesh._color = vec4(1,0,0,1);
     Torso.mesh.position = vec3(0,0.5,0);
-    //Torso.addChild(leftArm);
+    Torso.mesh.scale = vec3(0.5,1,0.3);
+
+    leftArm = new Entity(gl, program);
+    leftArm.mesh = new Cube(gl,program,0.4,1,0.4);
+    leftArm.mesh._color = vec4(0,0,1,1);
+    Torso.addChild(leftArm);
+    leftArm.position = vec3(3,1,0);
+    leftArm.mesh.position = vec3(0,-0.5,0);
     render();
 }
 
@@ -65,5 +72,6 @@ function render() {
         camera.render();
         Torso.rotate(vec3(0,1,0),1);
         Torso.render(gl,program);
+        leftArm.rotate(vec3(1,0,0),1);
         requestAnimationFrame(render);
 }

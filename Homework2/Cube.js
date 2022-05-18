@@ -119,7 +119,7 @@ class Cube{
         }
     }
 
-
+//#region Getters and Setters
     get position(){
         return vec4(this._transform[0][3],this._transform[1][3],this._transform[2][3],1)
     }
@@ -128,4 +128,11 @@ class Cube{
         if(position.type != "vec3") throw "wrong position type";
         this._transform = mult(translate(position[0],position[1],position[2]),this._transform);
     }
+
+    set scale(scale){
+        this._transform[0][0] = scale[0];
+        this._transform[1][1] = scale[1];
+        this._transform[2][2] = scale[2];
+    }
+//#endregion
 }
