@@ -15,9 +15,9 @@ class Entity{
 
     
 
-    render(gl, program){
-        if(this._mesh != null) this._mesh.render(gl,program);
-        for(var i = 0;i<this._children.length;i++) this._children[i].render(gl, program);
+    render(){
+        if(this._mesh != null) this._mesh.render(this._gl,this._program);
+        for(var i = 0;i<this._children.length;i++) this._children[i].render();
     }
 
     //#region Getters and Setters

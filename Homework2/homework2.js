@@ -46,7 +46,9 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,4,-4);
+    camera.position= vec3(0,0,-4);
+    var boxSize = 5;
+    //camera.projectionMatrix = ortho(-boxSize,boxSize,-boxSize,boxSize,-boxSize,boxSize);
 
     Torso = new Entity(gl,program);
     Torso.mesh = new Cube(gl,program);

@@ -10,7 +10,7 @@ class Camera extends Entity{
 
     render(){
         this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"modelViewMatrix"), false, flatten(this.transform));
-        this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"projectionMatrix"), false, flatten(this._projectionMatrix));
+        this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"projectionMatrix"), false, flatten((this._projectionMatrix)));
     }
     //#region Getter and Setters
     get fovy(){return this._fovy;}
@@ -31,5 +31,6 @@ class Camera extends Entity{
 
 
     get projectionMatrix(){return this._projectionMatrix;}
+    set projectionMatrix(projection){this._projectionMatrix = projection;}
     //#endregion
 }
