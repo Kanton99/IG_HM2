@@ -13,8 +13,6 @@ class Entity{
         for(var i = 0;i<this._children;i++) this._children[i].update();
     }
 
-    
-
     render(){
         if(this._mesh != null) this._mesh.render(this._gl,this._program);
         for(var i = 0;i<this._children.length;i++) this._children[i].render();

@@ -21,9 +21,7 @@ out vec4 vColor;
 void main()
 {
     gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
-    vNormal =  aNormal;
-    vec4 color = aPosition;
-    vColor = color;
+    vNormal = objectMatrix *  aNormal;
 }
 </script>
 
@@ -32,14 +30,12 @@ void main()
 
 precision mediump float;
 in vec4 vNormal;
-in vec4 vColor;
 uniform vec4 aColor;
 out vec4 fColor;
 
 void main()
 {
-    //fColor = aColor*dot(vNormal,normalize(vec4(1,1,1,1)));
-    fColor = (vNormal+1.f)/2.f;
+    fColor = aColor * dot((vNormal.xyz),normalize(vec3(-1,-1,-1))) * 0.5f;
 }
 </script>
 

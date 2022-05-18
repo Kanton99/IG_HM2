@@ -40,6 +40,7 @@ function init() {
     program = initShaders( gl, "vertex-shader", "fragment-shader");
 
     gl.useProgram( program);
+    gl.enable(gl.DEPTH_TEST);
 
     camera = new Camera(gl,program);
     camera.fovy = 90;
@@ -47,6 +48,7 @@ function init() {
     camera.near = 0.1;
     camera.far = 100;
     camera.position= vec3(0,0,-4);
+    //camera.rotate(vec3(1,0,0),45);
     var boxSize = 5;
     //camera.projectionMatrix = ortho(-boxSize,boxSize,-boxSize,boxSize,-boxSize,boxSize);
 

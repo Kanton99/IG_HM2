@@ -63,17 +63,18 @@ class Cube{
 
     cube()
     {
-        this.quad(3,7,6,2); //top
         this.quad(2,6,4,0); //front
         this.quad(6,7,5,4); //right
         this.quad(7,3,1,5); //back
         this.quad(3,2,0,1); //left
+        this.quad(3,7,6,2); //top
         this.quad(0,4,5,1); //bottom
     }
     //#endregion
     
     render(gl, program){
         gl.useProgram(program);
+
         gl.bindBuffer(gl.ARRAY_BUFFER, this._posBuffer);
         gl.vertexAttribPointer(this._positionLoc, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this._positionLoc);
@@ -85,6 +86,9 @@ class Cube{
         gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(mult(this._transform,this._parent.worldMatrix)));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
         gl.drawArrays(gl.TRIANGLES, 0, this._numPositions);
+
+        gl.disableVertexAttribArray(this._positionLoc);
+        gl.disableVertexAttribArray(this._normalLoc);
     }
 
     init(gl, program){
@@ -105,6 +109,8 @@ class Cube{
         gl.vertexAttribPointer(this._normalLoc,4,gl.FLOAT,false,0,0);
         gl.enableVertexAttribArray(this._positionLoc);
 
+        gl.disableVertexAttribArray(this._positionLoc);
+        gl.disableVertexAttribArray(this._normalLoc);
     }
 
     update(){
