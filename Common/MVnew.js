@@ -135,15 +135,14 @@ function vec4()
             out[2] = arguments[0][2];
             out[3] = arguments[0][3];
             return out;
-          }
-        }
-          else if(arguments[0].type == "vec3") {
+          }else if(arguments[0].type == "vec3") {
             out[0] = arguments[0][0];
             out[1] = arguments[0][1];
             out[2] = arguments[0][2];
             out[3] = 1.0;
             return out;
           }
+        }
           else {
             out[0] = arguments[0][0];
             out[1] = arguments[0][1];
@@ -499,30 +498,27 @@ function translate( x, y, z )
 
 function rotate( angle, axis )
 {
-  if ( axis.length == 3 ) {
-    axis = vec3(axis[0], axis[1], axis[2] );
-  }
-   if(arguments.length == 4) {
-    axis = vec3(arguments[1], arguments[2], arguments[3]);
-  }
-    if(axis.type != 'vec3') throw "rotate: axis not a vec3";
-    var v = normalize( axis );
+  if ( axis.length == 3 ) axis = vec3(axis[0], axis[1], axis[2] );  
+  if(arguments.length == 4) axis = vec3(arguments[1], arguments[2], arguments[3]);
+  
+  if(axis.type != 'vec3') throw "rotate: axis not a vec3";
+  var v = normalize( axis );
 
-    var x = v[0];
-    var y = v[1];
-    var z = v[2];
+  var x = v[0];
+  var y = v[1];
+  var z = v[2];
 
-    var c = Math.cos( radians(angle) );
-    var omc = 1.0 - c;
-    var s = Math.sin( radians(angle) );
+  var c = Math.cos( radians(angle) );
+  var omc = 1.0 - c;
+  var s = Math.sin( radians(angle) );
 
-    var result = mat4(
-        x*x*omc + c,   x*y*omc + z*s, x*z*omc - y*s, 0.0 ,
-         x*y*omc - z*s, y*y*omc + c,   y*z*omc + x*s, 0.0 ,
-         x*z*omc + y*s, y*z*omc - x*s, z*z*omc + c,   0.0 ,
-        0.0, 0.0, 0.0, 1.0
-    );
-    return result;
+  var result = mat4(
+      x*x*omc + c,   x*y*omc + z*s, x*z*omc - y*s, 0.0 ,
+        x*y*omc - z*s, y*y*omc + c,   y*z*omc + x*s, 0.0 ,
+        x*z*omc + y*s, y*z*omc - x*s, z*z*omc + c,   0.0 ,
+      0.0, 0.0, 0.0, 1.0
+  );
+  return result;
 }
 
 function rotateX(theta) {
