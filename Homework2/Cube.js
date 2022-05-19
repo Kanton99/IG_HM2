@@ -79,8 +79,11 @@ class Cube{
         gl.bindBuffer(gl.ARRAY_BUFFER, this._norBuffer);
         gl.vertexAttribPointer(this._normalLoc,4,gl.FLOAT,false,0,0);
         gl.enableVertexAttribArray(this._normalLoc);
-
-        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(mult((this._transform),this._parent.worldMatrix)));
+        
+        var pos = mult(this._transform,this._parent.worldMatrix);
+        var objectMatrix = mat3(flatten(mult(this._transform,this._parent.worldMatrix)));
+        objectMatrix = mult(translate(pos[0],pos[1],pos[2]),mat4(flatten(objectMatrix)));
+        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(objectMatrix));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
         gl.drawArrays(gl.LINES, 0, this._numPositions);
 
