@@ -52,9 +52,9 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,4,0);
-    camera.rotate(vec3(1,0,0),90);
-    camera._perspective = false;
+    camera.position= vec3(0,0,-6);
+    //camera.rotate(vec3(1,0,0),90);
+    //camera._perspective = false;
 
     world = new Entity(gl, program);
 //Build kangaroo
@@ -70,7 +70,7 @@ function init() {
         }
         {//Left Arm
             leftArm = new Entity(gl, program);
-            leftArm.position = vec3(3.5,0,0);
+            leftArm.position = vec3(0.75,0,0);
             leftArm.mesh = new Cube(gl,program);
             leftArm.mesh._color = vec4(0,0,1,1);
             leftArm.mesh.position = vec3(0,-0.5,0);
@@ -81,7 +81,7 @@ function init() {
                 leftForeArm = new Entity(gl,program);
                 leftForeArm.mesh = new Cube(gl,program);
                 leftForeArm.mesh._color = vec4(0,1,0,1);
-                leftForeArm.position = vec3(0,-0.94,0);
+                leftForeArm.position = vec3(0,-0.52,0);
                 leftForeArm.mesh.position = vec3(0,-1.01,0);
                 leftForeArm.mesh.scale = vec3(0.2,0.5,0.2);
                 //leftForeArm.rotate(vec3(1,0,0),45);
@@ -90,7 +90,7 @@ function init() {
         }
         {//right Arm
             rightArm = new Entity(gl, program);
-            rightArm.position = vec3(-3.5,0,0);
+            rightArm.position = vec3(-0.75,0,0);
             rightArm.mesh = new Cube(gl,program);
             rightArm.mesh._color = vec4(0,0,1,1);
             rightArm.mesh.position = vec3(0,-0.5,0);
@@ -99,12 +99,12 @@ function init() {
             
             {//right ForeArm
                 rightForeArm = new Entity(gl,program);
+                rightForeArm.position = vec3(0,-1,0);
+                rightForeArm.rotate(vec3(1,0,0),45);
                 rightForeArm.mesh = new Cube(gl,program);
                 rightForeArm.mesh._color = vec4(0,1,0,1);
-                rightForeArm.position = vec3(0,-0.94,0);
-                rightForeArm.mesh.position = vec3(0,-1.01,0);
+                rightForeArm.mesh.position = vec3(0,-0.52,0);
                 rightForeArm.mesh.scale = vec3(0.2,0.5,0.2);
-                //rightForeArm.rotate(vec3(1,0,0),45);
                 rightArm.addChild(rightForeArm);
             }
         }

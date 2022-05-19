@@ -62,7 +62,7 @@ class Entity{
     }
 
     rotate(axis, angle){
-        this.transform = mult(rotate(angle,axis),this.transform);
+        this.transform = mult(this.transform,rotate(angle,axis));
     }
 
 

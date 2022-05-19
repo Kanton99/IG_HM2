@@ -22,7 +22,7 @@ void main()
 {
     gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
     mat4 rotationMatrix = mat4(mat3(objectMatrix));
-    vNormal = aNormal;
+    vNormal = objectMatrix * aNormal;
 }
 </script>
 
@@ -36,8 +36,10 @@ out vec4 fColor;
 
 void main()
 {
-    fColor = aColor;
-    fColor = (vNormal+1.f)/2.f;
+    vec4 ambient = aColor * 0.7f;
+    vec4 light = aColor * -dot(normalize(-(vNormal)),normalize(vec4(-1,-1,-1,1)));
+    fColor = ambient + light;
+    //fColor = (vNormal+1.f)/2.f;
 }
 </script>
 

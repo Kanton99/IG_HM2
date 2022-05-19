@@ -80,12 +80,10 @@ class Cube{
         gl.vertexAttribPointer(this._normalLoc,4,gl.FLOAT,false,0,0);
         gl.enableVertexAttribArray(this._normalLoc);
         
-        var pos = mult(this._transform,this._parent.worldMatrix);
-        var objectMatrix = mat3(flatten(mult(this._transform,this._parent.worldMatrix)));
-        objectMatrix = mult(translate(pos[0],pos[1],pos[2]),mat4(flatten(objectMatrix)));
-        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(objectMatrix));
+        var pos = mult(this._parent.worldMatrix,this._transform);
+        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(pos));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
-        gl.drawArrays(gl.LINES, 0, this._numPositions);
+        gl.drawArrays(gl.TRIANGLES, 0, this._numPositions);
 
         gl.disableVertexAttribArray(this._positionLoc);
         gl.disableVertexAttribArray(this._normalLoc);
@@ -131,9 +129,9 @@ class Cube{
 
     set scale(scale){
         if(scale.type != 'vec3') throw "scale not vec3 type";
-        this._transform[0][0] = scale[0];
-        this._transform[1][1] = scale[1];
-        this._transform[2][2] = scale[2];
+        this._transform[0][0] *= scale[0];
+        this._transform[1][1] *= scale[1];
+        this._transform[2][2] *= scale[2];
     }
 //#endregion
 }
