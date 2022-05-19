@@ -15,8 +15,13 @@ var pointsArray = [];
 
 var camera;
 
-var Torso;
+var world;
+var kangaroo;
+var torso;
 var leftArm;
+var leftForeArm;
+var rightArm;
+var rightForeArm;
 
 
 init();
@@ -43,35 +48,77 @@ function init() {
     gl.enable(gl.DEPTH_TEST);
 
     camera = new Camera(gl,program);
-    camera.fovy = 45;
+    camera.fovy = 60;
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,0,-10);
-    //camera.rotate(vec3(1,0,0),45);
-    var boxSize = 5;
-    //camera.projectionMatrix = ortho(-boxSize,boxSize,-boxSize,boxSize,-boxSize,boxSize);
+    camera.position= vec3(0,4,0);
+    camera.rotate(vec3(1,0,0),90);
+    camera._perspective = false;
 
-    Torso = new Entity(gl,program);
-    Torso.mesh = new Cube(gl,program);
-    Torso.mesh._color = vec4(1,0,0,1);
-    Torso.mesh.position = vec3(0,0.5,0);
-    Torso.mesh.scale = vec3(0.5,1,0.3);
-
-    leftArm = new Entity(gl, program);
-    leftArm.mesh = new Cube(gl,program,0.4,1,0.4);
-    leftArm.mesh._color = vec4(0,0,1,1);
-    Torso.addChild(leftArm);
-    leftArm.position = vec3(3,1,0);
-    leftArm.mesh.position = vec3(0,-0.5,0);
+    world = new Entity(gl, program);
+//Build kangaroo
+    {//Build kangaroo
+        kangaroo = new Entity(gl, program);
+        {//torso
+            torso = new Entity(gl,program);
+            torso.mesh = new Cube(gl,program);
+            torso.mesh._color = vec4(1,0,0,1);
+            torso.mesh.position = vec3(0,-1,0);
+            torso.mesh.scale = vec3(0.5,1,0.2);
+            kangaroo.addChild(torso);
+        }
+        {//Left Arm
+            leftArm = new Entity(gl, program);
+            leftArm.position = vec3(3.5,0,0);
+            leftArm.mesh = new Cube(gl,program);
+            leftArm.mesh._color = vec4(0,0,1,1);
+            leftArm.mesh.position = vec3(0,-0.5,0);
+            leftArm.mesh.scale = vec3(0.2,0.5,0.2);
+            torso.addChild(leftArm);
+            
+            {//Left ForeArm
+                leftForeArm = new Entity(gl,program);
+                leftForeArm.mesh = new Cube(gl,program);
+                leftForeArm.mesh._color = vec4(0,1,0,1);
+                leftForeArm.position = vec3(0,-0.94,0);
+                leftForeArm.mesh.position = vec3(0,-1.01,0);
+                leftForeArm.mesh.scale = vec3(0.2,0.5,0.2);
+                //leftForeArm.rotate(vec3(1,0,0),45);
+                leftArm.addChild(leftForeArm);
+            }
+        }
+        {//right Arm
+            rightArm = new Entity(gl, program);
+            rightArm.position = vec3(-3.5,0,0);
+            rightArm.mesh = new Cube(gl,program);
+            rightArm.mesh._color = vec4(0,0,1,1);
+            rightArm.mesh.position = vec3(0,-0.5,0);
+            rightArm.mesh.scale = vec3(0.2,0.5,0.2);
+            torso.addChild(rightArm);
+            
+            {//right ForeArm
+                rightForeArm = new Entity(gl,program);
+                rightForeArm.mesh = new Cube(gl,program);
+                rightForeArm.mesh._color = vec4(0,1,0,1);
+                rightForeArm.position = vec3(0,-0.94,0);
+                rightForeArm.mesh.position = vec3(0,-1.01,0);
+                rightForeArm.mesh.scale = vec3(0.2,0.5,0.2);
+                //rightForeArm.rotate(vec3(1,0,0),45);
+                rightArm.addChild(rightForeArm);
+            }
+        }
+    }
+    world.addChild(kangaroo);
     render();
 }
 
 
 function render() {
+        gl.clear(gl.COLOR_BUFFER_BIT);
         camera.render();
-        Torso.rotate(vec3(0,1,0),1);
-        Torso.render(gl,program);
-        leftArm.rotate(vec3(1,0,0),1);
+        kangaroo.rotate(vec3(0,1,0),1);
+        world.render(gl,program);
+        //leftArm.rotate(vec3(1,0,0),1);
         requestAnimationFrame(render);
 }

@@ -21,7 +21,8 @@ out vec4 vColor;
 void main()
 {
     gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
-    vNormal = objectMatrix *  aNormal;
+    mat4 rotationMatrix = mat4(mat3(objectMatrix));
+    vNormal = aNormal;
 }
 </script>
 
@@ -36,6 +37,7 @@ out vec4 fColor;
 void main()
 {
     fColor = aColor;
+    fColor = (vNormal+1.f)/2.f;
 }
 </script>
 

@@ -22,7 +22,7 @@ class Entity{
     get transform(){return this._transform;}
     set transform(m){
         this._transform = m;
-        this.update()
+        //this.update()
     }
 
     get worldMatrix(){

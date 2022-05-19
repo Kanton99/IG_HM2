@@ -1,10 +1,7 @@
 class Cube{
-    constructor(gl,program,xSize=1,ySize=1,zSize=1){
+    constructor(gl,program){
         this._parent;
         this._transform = mat4();
-        this._transform[0][0] *= xSize;
-        this._transform[1][1] *= ySize;
-        this._transform[2][2] *= zSize;
 
         this._vertices = [];
         this._positions = [];
@@ -83,9 +80,9 @@ class Cube{
         gl.vertexAttribPointer(this._normalLoc,4,gl.FLOAT,false,0,0);
         gl.enableVertexAttribArray(this._normalLoc);
 
-        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(mult(this._transform,this._parent.worldMatrix)));
+        gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(mult((this._transform),this._parent.worldMatrix)));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
-        gl.drawArrays(gl.TRIANGLES, 0, this._numPositions);
+        gl.drawArrays(gl.LINES, 0, this._numPositions);
 
         gl.disableVertexAttribArray(this._positionLoc);
         gl.disableVertexAttribArray(this._normalLoc);
@@ -130,6 +127,7 @@ class Cube{
     }
 
     set scale(scale){
+        if(scale.type != 'vec3') throw "scale not vec3 type";
         this._transform[0][0] = scale[0];
         this._transform[1][1] = scale[1];
         this._transform[2][2] = scale[2];
