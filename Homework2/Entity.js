@@ -62,9 +62,18 @@ class Entity{
     }
 
     rotate(axis, angle){
+        if(axis == vec3(0,0,0)) return;
         this.transform = mult(this.transform,rotate(angle,axis));
     }
 
+    get rotationMatrix(){
+        return mat3(this.worldMatrix);
+    }
+
+    get forward(){
+        var entMatrix = this.rotationMatrix;
+        return normalize(mult(entMatrix,vec3(0,0,1)));
+    }
 
     //#endregion
 

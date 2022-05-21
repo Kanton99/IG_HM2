@@ -243,13 +243,19 @@ function mat3()
           out[0][0]=out[1][1]=out[2][2]=1.0;
           out[0][1]=out[0][2]=out[1][0]=out[1][2]=out[2][0]=out[2][1]=0.0;
           break;
-    case 1:
-         for(var i=0; i<3; i++) for(var i=0; i<3; i++) {
-           out[i][j]=arguments[0][3*i+j];
-         }
+      case 1:
+          if(arguments[0].type == "mat4"){
+            for(var i =0;i<3;i++)for(var j = 0;j<3;j++){
+              out[i][j] = arguments[0][i][j];
+            }
+            break;
+          }
+          for(var i=0; i<3; i++) for(var j=0; j<3; j++) {
+            out[i][j]=arguments[0][3*i+j];
+          }
         break;
 
-    case 9:
+      case 9:
         for(var i=0; i<3; i++) for(var j=0; j<3; j++) {
           out[i][j] = arguments[3*i+j];
         }
