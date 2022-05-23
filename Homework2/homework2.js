@@ -37,13 +37,13 @@ var head;
 
 var tail;
 
-var oldMouse = vec2(1,1);
-var mousePos = vec2(1,1);
+var mousePos = vec2();
+var mouseDir;
 var trakMouse = false;
 var mouseIn = false;
 var rect;
 
-var time;
+var deltaTime;
 
 init();
 
@@ -73,7 +73,7 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,-3,-10);
+    camera.position= vec3(0,-3,-5);
     //camera.rotate(vec3(1,0,0),90);
     //camera._perspective = false;
 
@@ -86,7 +86,10 @@ function init() {
             torso.mesh._color = vec4(1,0,0,1);
             torso.mesh.position = vec3(0,-1,0);
             torso.mesh.scale = vec3(0.5,1,0.2);
-            torso.rotate(vec3(1,0,0),-45)
+            torso.rotate(vec3(1,0,0),-45);
+
+            //torso.mesh._texture.loadTexture(gl, "./Resources/Textures/kangaroo-fur-texture.jpg")
+            //torso.mesh.gen_textCoods();
             kangaroo.addChild(torso);
         }
         {//Left Arm
@@ -268,7 +271,7 @@ function init() {
         var grassPlane = new Entity(gl, program);
         world.addChild(grassPlane);
         grassPlane.mesh = new Plane(gl,program);
-        grassPlane.mesh._color = vec4(0,1,0,1);
+        grassPlane.mesh._color = vec4(0,0.7,0,1);
         grassPlane.mesh.scale = vec3(100,0,100);
     }
     {//Events
@@ -285,39 +288,44 @@ function init() {
             canvas.addEventListener("mouseleave",function(event){
                 mouseIn = false;
                 mousePos =vec2();
-                oldMouse = mousePos;
-            })
-            canvas.addEventListener("mousemove",function(event){
-                if(trakMouse && mouseIn){
-                    oldMouse = mousePos;
-                    mousePos = vec2(event.x-rect.left,event.y-rect.top);
-                }else{
-                    mousePos = vec2()
-                    oldMouse=mousePos
-                }
             })
         }
 
     }
-    render();
+    render(event);
 }
 
-function render() {
+function render(event) {
         var oldTime = time;
-        time = Date.now()/1000;
-        var deltaTime = time-oldTime;
+        var time = Date.now()/1000;
+        deltaTime = time-oldTime;
         gl.clear(gl.COLOR_BUFFER_BIT);
-        
-        var mouseDir = subtract(mousePos,oldMouse);
-        if(length(mouseDir)>0){ 
-            mouseDir = vec3(mouseDir[0],mouseDir[1],0);
-            var cameraForward = camera.forward;
-            var rotAxis = cross(mult(camera.rotationMatrix, mouseDir),cameraForward);
-            camera.rotate(negate(vec3(rotAxis)),length(rotAxis));
-        }
+        captureMouse(event)
+        moveCamera();
         camera.render();
-        //kangaroo.rotate(vec3(0,1,0),1);
+        kangaroo.rotate(vec3(0,1,0),1);
         world.render(gl,program);
         //leftArm.rotate(vec3(1,0,0),1);
         requestAnimationFrame(render);
+}
+
+function moveCamera(){
+    if(trakMouse && mouseIn){
+        if(length(mouseDir)>0){ 
+            var mouseDir3 = vec3(mouseDir[0],mouseDir[1],0);
+            var cameraForward = camera.forward;
+            var rotAxis = vec3(cross(mouseDir3,cameraForward));
+            console.log(mouseDir3);
+            camera.rotate(mult(camera.rotationMatrix,rotAxis),length(rotAxis));
+        }
+    }
+}
+
+function captureMouse(event){
+    if(trakMouse && mouseIn){
+        var oldMouse = mousePos;
+        mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
+        mouseDir = subtract(mousePos,oldMouse);
+        console.log(mouseDir);
+    }  
 }

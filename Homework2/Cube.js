@@ -5,6 +5,7 @@ class Cube extends mesh{
         this.genVerticies();
         this.cube();
         this.init(gl,program);
+        this.gen_textCoods();
     }
 
     //#region Contruct shape
@@ -27,6 +28,16 @@ class Cube extends mesh{
         this.quad(0,4,5,1); //bottom
     }
     //#endregion
+    gen_textCoods(){
+        for(var i = 0;i<this._positions.length/4;i++){  
+            this._texture._textCoords.push(vec2(0,0));
+            this._texture._textCoords.push(vec2(0,1));
+            this._texture._textCoords.push(vec2(1,1));
 
+            this._texture._textCoords.push(vec2(0,0));
+            this._texture._textCoords.push(vec2(1,1));
+            this._texture._textCoords.push(vec2(1,0));
+        }
+    }
 
 }
