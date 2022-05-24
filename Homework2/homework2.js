@@ -296,6 +296,8 @@ function init() {
 }
 
 function render(event) {
+        captureMouse(event)
+        moveCamera()
         var oldTime = time;
         var time = Date.now()/1000;
         deltaTime = time-oldTime;
@@ -315,7 +317,6 @@ function moveCamera(){
             var mouseDir3 = vec3(mouseDir[0],mouseDir[1],0);
             var cameraForward = camera.forward;
             var rotAxis = vec3(cross(mouseDir3,cameraForward));
-            console.log(mouseDir3);
             camera.rotate(mult(camera.rotationMatrix,rotAxis),length(rotAxis));
         }
     }
@@ -326,6 +327,5 @@ function captureMouse(event){
         var oldMouse = mousePos;
         mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
         mouseDir = subtract(mousePos,oldMouse);
-        console.log(mouseDir);
     }  
 }
