@@ -73,7 +73,7 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,-3,-5);
+    camera.position= vec3(0,-3,-3);
     //camera.rotate(vec3(1,0,0),90);
     //camera._perspective = false;
 
@@ -274,6 +274,13 @@ function init() {
         grassPlane.mesh._color = vec4(0,0.7,0,1);
         grassPlane.mesh.scale = vec3(100,0,100);
     }
+    var debug = new Entity(gl,program);
+    debug.mesh = new Cube(gl, program);
+    //world.addChild(debug);
+    debug.position = vec3(0,3,0);
+    debug.rotate(vec3(0,1,0),90);
+    debug.rotate(vec3(0,0,1),90);
+    debug.mesh._texture.loadTexture(gl,"./Resources/Textures/download.jpg")
     {//Events
         {//mouse controls
             canvas.addEventListener("mousedown",function(event){
@@ -292,22 +299,21 @@ function init() {
         }
 
     }
-    render(event);
+    render();
 }
 
 function render(event) {
-        captureMouse(event)
-        moveCamera()
         var oldTime = time;
         var time = Date.now()/1000;
         deltaTime = time-oldTime;
+        gl.clearColor(0.53,0.8,0.98,1);
         gl.clear(gl.COLOR_BUFFER_BIT);
-        captureMouse(event)
+        captureMouse()
         moveCamera();
         camera.render();
         kangaroo.rotate(vec3(0,1,0),1);
+        //world._children[2].rotate(vec3(0,1,0),1)
         world.render(gl,program);
-        //leftArm.rotate(vec3(1,0,0),1);
         requestAnimationFrame(render);
 }
 
@@ -322,7 +328,7 @@ function moveCamera(){
     }
 }
 
-function captureMouse(event){
+function captureMouse(){
     if(trakMouse && mouseIn){
         var oldMouse = mousePos;
         mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);

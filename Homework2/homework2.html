@@ -10,6 +10,7 @@
 in vec4 aPosition;
 in vec4 aNormal;
 in vec2 aTexCoord;
+in vec3 aTangent;
 uniform mat4 objectMatrix;
 
 uniform mat4 modelViewMatrix;
@@ -18,12 +19,19 @@ uniform mat4 inverseObjectMatrix;
 
 out vec3 vNormal;
 out vec2 vTexCoord;
+out mat3 tangentSpace;  
 void main()
 {
     gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
     vNormal = (inverseObjectMatrix * aNormal).xyz;
     vTexCoord = aTexCoord;
 
+    vec3 T = normalize(vec3(objectMatrix*vec4(aTangent,0.f)));
+    vec3 N = normalize(vec3(objectMatrix*vec4(aNormal.xyz,0.f)));
+    vec3 bitangent = cross(aNormal.xyz,aTangent);
+    vec3 B = normalize(vec3(objectMatrix*vec4(bitangent,0.f)));
+    mat3 TBN = (mat3(T,B,N));
+    tangentSpace = TBN;
 }
 </script>
 
@@ -33,6 +41,7 @@ void main()
 precision mediump float;
 in vec3 vNormal;
 in vec2 vTexCoord;
+in mat3 tangentSpace;
 
 uniform vec4 aColor;
 uniform sampler2D aTexture;
@@ -42,13 +51,16 @@ out vec4 fColor;
 
 void main()
 {
-    vec3 bump = normalize((texture(bumpmap,vTexCoord).rgb*2.f)-1.f);
-    vec3 lightDir = vec3(-1,-1,-1);
-    float lightIntensity = 0.7f;
-    float intensity = dot(normalize(vNormal+bump),normalize(lightDir)) * lightIntensity;
+    vec3 normal = texture(bumpmap,vTexCoord).rgb;
+    //fColor = vec4(normal.xyz,1);
+    normal = normal*2.f-1.f;
+    normal = normalize(tangentSpace*normal);
+    vec3 lightDir = normalize(vec3(-1,-1,-1));
+    float light = dot(normal,lightDir);
     vec4 textureColor = texture(aTexture,vTexCoord);
-    fColor = textureColor+intensity;
-    //fColor = vec4(intensity,intensity,intensity,1);
+    fColor = textureColor*light;
+    //fColor = vec4(light,light,light,1);
+    //fColor = textureColor;
 }
 </script>
 

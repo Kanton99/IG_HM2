@@ -8,6 +8,7 @@ class mesh{
         this._positions = [];
         this._triagles = [];
         this._normals = [];
+        this._tangents = [];
         this._numPositions = 0;
         
         this._texture = new Texture();
@@ -23,7 +24,9 @@ class mesh{
         this._tBuffer = gl.createBuffer();
         this._textLoc;
 
-        this._material = new Material();
+        this._tanBuffer = gl.createBuffer();
+        this._tanLoc;
+
     }
 
     
@@ -54,6 +57,10 @@ class mesh{
         gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(pos));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
 
+        gl.bindBuffer(gl.ARRAY_BUFFER,this._tanBuffer);
+        gl.vertexAttribPointer(this._tanLoc,3,gl.FLOAT,false,0,0);
+        gl.enableVertexAttribArray(this._tanLoc);
+
 
         gl.drawArrays(gl.TRIANGLES, 0, this._numPositions);
     
@@ -61,6 +68,7 @@ class mesh{
         gl.disableVertexAttribArray(this._positionLoc);
         gl.disableVertexAttribArray(this._normalLoc);
         gl.disableVertexAttribArray(this._textLoc);
+        gl.disableVertexAttribArray(this._tanLoc);
     }
 
     
@@ -69,27 +77,20 @@ class mesh{
         this._texture.loadTexture(gl,"./Resources/Textures/kangaroo-fur-texture.jpg");
         this._bumpmap.loadTexture(gl,"./Resources/Textures/Seamless_Fur_Coat_Texture_NORMAL.jpg");
         this.gen_textCoods();
+        this.genTangents();
+
         gl.bindBuffer(gl.ARRAY_BUFFER, this._posBuffer);
         gl.bufferData(gl.ARRAY_BUFFER,flatten(this._positions),gl.STATIC_DRAW);
-
         this._positionLoc = gl.getAttribLocation(program, "aPosition");
-        gl.vertexAttribPointer(this._positionLoc, 4, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(this._positionLoc);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this._norBuffer);
         gl.bufferData(gl.ARRAY_BUFFER,flatten(this._normals),gl.STATIC_DRAW);
-
         this._normalLoc = gl.getAttribLocation(program,"aNormal");
-        gl.vertexAttribPointer(this._normalLoc,4,gl.FLOAT,false,0,0);
-        gl.enableVertexAttribArray(this._positionLoc);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this._tBuffer);
         gl.bufferData(gl.ARRAY_BUFFER,flatten(this._texture._textCoords),gl.STATIC_DRAW);
-
         this._textLoc = gl.getAttribLocation(program,"aTexCoord");
-        gl.vertexAttribPointer(this._textLoc, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(this._textLoc);
-        
+
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this._texture._texture);
         gl.uniform1i(gl.getUniformLocation(program,"aTexture"), 0);
@@ -98,9 +99,10 @@ class mesh{
         gl.bindTexture(gl.TEXTURE_2D, this._bumpmap._texture);
         gl.uniform1i(gl.getUniformLocation(program,"bumpmap"), 1);
 
-        gl.disableVertexAttribArray(this._positionLoc);
-        gl.disableVertexAttribArray(this._normalLoc);
-        gl.disableVertexAttribArray(this._textLoc);
+        gl.bindBuffer(gl.ARRAY_BUFFER,this._tanBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER,flatten(this._tangents),gl.STATIC_DRAW);
+        this._tanLoc = gl.getAttribLocation(program,"aTangent");
+
     }
     //#region generation functions
     genNormals(){
@@ -129,6 +131,36 @@ class mesh{
         this._positions.push(this._vertices[c]);
         this._triagles.push([a,b,c]);
         this._numPositions+=3;
+    }
+
+    genTangents(){
+        for(var i = 0;i<this._triagles.length;i++){
+            var a = vec3(this._vertices[this._triagles[i][0]]);
+            var b = vec3(this._vertices[this._triagles[i][1]]);
+            var c = vec3(this._vertices[this._triagles[i][2]]);
+
+            var e1 = subtract(b,a);
+            var e2 = subtract(c,a);
+
+            var uv1 = this._texture._textCoords[i*3]
+            var uv2 = this._texture._textCoords[i*3+1]
+            var uv3 = this._texture._textCoords[i*3+2]
+
+            var dUv1 = subtract(uv2,uv1);
+            var dUv2 = subtract(uv3,uv1);
+
+            var tangent = vec3();
+
+            var f = 1/(dUv1[0]*dUv2[1]-dUv1[1]*dUv2[0]);
+
+            tangent[0] = f * (dUv2[1] * e1[0] - dUv1[1] * e2[0]);
+            tangent[1] = f * (dUv2[1] * e1[1] - dUv1[1] * e2[1]);
+            tangent[2] = f * (dUv2[1] * e1[2] - dUv1[1] * e2[2]);
+            tangent = normalize(tangent);
+            this._tangents.push(tangent);
+            this._tangents.push(tangent);
+            this._tangents.push(tangent);
+        }
     }
     //#endregion
 

@@ -29,14 +29,14 @@ class Cube extends mesh{
     }
     //#endregion
     gen_textCoods(){
-        for(var i = 0;i<this._positions.length/4;i++){  
-            this._texture._textCoords.push(vec2(0,0));
+        for(var i = 0;i<this._triagles.length;i+=2){ 
             this._texture._textCoords.push(vec2(0,1));
-            this._texture._textCoords.push(vec2(1,1));
-
             this._texture._textCoords.push(vec2(0,0));
-            this._texture._textCoords.push(vec2(1,1));
+            this._texture._textCoords.push(vec2(1,0)); 
+
+            this._texture._textCoords.push(vec2(0,1));
             this._texture._textCoords.push(vec2(1,0));
+            this._texture._textCoords.push(vec2(1,1));
         }
     }
 
