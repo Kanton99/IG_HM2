@@ -60,7 +60,7 @@ void main()
     vec4 textureColor = texture(aTexture,vTexCoord);
     fColor = textureColor*light;
     //fColor = vec4(light,light,light,1);
-    //fColor = textureColor;
+    fColor = textureColor;
 }
 </script>
 

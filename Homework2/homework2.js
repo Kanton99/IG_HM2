@@ -273,7 +273,10 @@ function init() {
         grassPlane.mesh = new Plane(gl,program);
         grassPlane.mesh._color = vec4(0,0.7,0,1);
         grassPlane.mesh.scale = vec3(100,0,100);
+        grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
+        grassPlane.mesh._bumpmap.loadTexture(gl,"");
     }
+    {//debug cube
     var debug = new Entity(gl,program);
     debug.mesh = new Cube(gl, program);
     //world.addChild(debug);
@@ -281,6 +284,7 @@ function init() {
     debug.rotate(vec3(0,1,0),90);
     debug.rotate(vec3(0,0,1),90);
     debug.mesh._texture.loadTexture(gl,"./Resources/Textures/download.jpg")
+    }
     {//Events
         {//mouse controls
             canvas.addEventListener("mousedown",function(event){
