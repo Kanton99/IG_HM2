@@ -271,10 +271,9 @@ function init() {
         var grassPlane = new Entity(gl, program);
         world.addChild(grassPlane);
         grassPlane.mesh = new Plane(gl,program);
-        grassPlane.mesh._color = vec4(0,0.7,0,1);
         grassPlane.mesh.scale = vec3(100,0,100);
         grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
-        grassPlane.mesh._bumpmap.loadTexture(gl,"");
+        //grassPlane.mesh._bumpmap.loadTexture(gl,"./Resources/Textures/download.jpg");
     }
     {//debug cube
     var debug = new Entity(gl,program);
@@ -312,8 +311,8 @@ function render(event) {
         deltaTime = time-oldTime;
         gl.clearColor(0.53,0.8,0.98,1);
         gl.clear(gl.COLOR_BUFFER_BIT);
-        captureMouse()
-        moveCamera();
+        // captureMouse()
+        // moveCamera();
         camera.render();
         kangaroo.rotate(vec3(0,1,0),1);
         //world._children[2].rotate(vec3(0,1,0),1)

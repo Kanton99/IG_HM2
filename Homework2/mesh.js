@@ -38,7 +38,7 @@ class mesh{
         gl.enableVertexAttribArray(this._positionLoc);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this._norBuffer);
-        gl.vertexAttribPointer(this._normalLoc, 4, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this._normalLoc, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this._normalLoc);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this._tBuffer);
@@ -55,6 +55,7 @@ class mesh{
         
         var pos = mult(this._parent.worldMatrix,this._transform);
         gl.uniformMatrix4fv(gl.getUniformLocation(program,"objectMatrix"), false, flatten(pos));
+        gl.uniformMatrix4fv(gl.getUniformLocation(program,"inverseObjectMatrix"), false, flatten(inverse(pos)));
         gl.uniform4fv(gl.getUniformLocation(program,"aColor"), this._color);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this._tanBuffer);
@@ -112,7 +113,7 @@ class mesh{
             var c = this._vertices[this._triagles[t][2]];
             var ab = subtract(b,a);
             var ac = subtract(c,a);
-            var normal = vec4(negate(normalize(cross(ab,ac))));
+            var normal = negate(normalize(cross(ab,ac)));
             this._normals.push(normal);
             this._normals.push(normal);
             this._normals.push(normal);
