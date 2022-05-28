@@ -113,7 +113,7 @@ class mesh{
             var c = this._vertices[this._triagles[t][2]];
             var ab = subtract(b,a);
             var ac = subtract(c,a);
-            var normal = negate(normalize(cross(ab,ac)));
+            var normal = (normalize(cross(ab,ac)));
             this._normals.push(normal);
             this._normals.push(normal);
             this._normals.push(normal);
@@ -177,9 +177,11 @@ class mesh{
 
     set scale(scale){
         if(scale.type != 'vec3') throw "scale not vec3 type";
-        this._transform[0][0] *= scale[0];
-        this._transform[1][1] *= scale[1];
-        this._transform[2][2] *= scale[2];
+        this._transform[0][0] = scale[0];
+        this._transform[1][1] = scale[1];
+        this._transform[2][2] = scale[2];
     }
+
+    
     //#endregion
 }

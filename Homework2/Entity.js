@@ -14,7 +14,6 @@ class Entity{
     }
 
     render(){
-        
         this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program, "inverseObjectMatrix"),false,flatten(transpose(inverse(this.worldMatrix))))
         if(this._mesh != null) this._mesh.render(this._gl,this._program);
         for(var i = 0;i<this._children.length;i++) this._children[i].render();

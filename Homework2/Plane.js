@@ -20,13 +20,13 @@ class Plane extends mesh{
     }
     
     gen_textCoods(){
-            this._texture._textCoords.push(vec2(0,10));
-            this._texture._textCoords.push(vec2(0,0));
-            this._texture._textCoords.push(vec2(10,0)); 
+        this._texture._textCoords.push(vec2(0,1));
+        this._texture._textCoords.push(vec2(0,0));
+        this._texture._textCoords.push(vec2(1,0)); 
 
-            this._texture._textCoords.push(vec2(0,10));
-            this._texture._textCoords.push(vec2(10,0));
-            this._texture._textCoords.push(vec2(10,10));
+        this._texture._textCoords.push(vec2(0,1));
+        this._texture._textCoords.push(vec2(1,0));
+        this._texture._textCoords.push(vec2(1,1));
     }
     //#endregion
 }

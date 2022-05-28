@@ -206,6 +206,17 @@ function init() {
             head.mesh._color = vec4(0.5,0.5,0,1);
             head.mesh.scale = vec3(0.3,0.25,0.2);
             head.mesh.position = vec3(0,0.3,0.3);
+            head.mesh._texture.loadTexture(gl,"./Resources/Textures/kangaroo-fur-texture-eyes.jpg");
+            for(var i = 0;i<head.mesh._texture._textCoords.length;i++){
+                var textCoord = head.mesh._texture._textCoords[i];
+                if((i<12 || i>17) && textCoord[0]==0){
+                    textCoord[0] = 0.5;
+                }
+                //head.mesh._texture._textCoords[i] = textCoord;
+            }
+
+            gl.bindBuffer(gl.ARRAY_BUFFER,head.mesh._tBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER,flatten(head.mesh._texture._textCoords),gl.STATIC_DRAW);
             head.rotate(vec3(1,0,0),45);
             {
                 var nose = new Entity(gl,program);
@@ -274,6 +285,7 @@ function init() {
         grassPlane.mesh.scale = vec3(100,0,100);
         grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
         //grassPlane.mesh._bumpmap.loadTexture(gl,"./Resources/Textures/download.jpg");
+        //grassPlane.rotate(vec3(1,0,0),180);
     }
     {//debug cube
     var debug = new Entity(gl,program);

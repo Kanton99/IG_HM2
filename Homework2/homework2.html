@@ -4,7 +4,7 @@
 
 <canvas id="gl-canvas" width="512"" height="512"> </canvas>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
+<script id="vertex-shader" type="x-shader/x-vertex" src="vertex-shader.vs">
 #version 300 es
 
 in vec4 aPosition;
@@ -20,15 +20,16 @@ uniform mat4 inverseObjectMatrix;
 out vec3 vNormal;
 out vec2 vTexCoord;
 out mat3 tangentSpace;  
+out vec3 N;
 void main()
 {
     gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
     vTexCoord = aTexCoord;
 
-    vec3 T = normalize(vec3(inverseObjectMatrix*vec4(aTangent.xyz,0.f)));
-    vec3 N = normalize(vec3(inverseObjectMatrix*vec4(aNormal,0.f)));
+    vec3 T = normalize(vec3(objectMatrix * vec4(aTangent.xyz,0.f)));
+    N =      normalize(vec3(objectMatrix * vec4(aNormal,     0.f)));
     vec3 B = cross(N,T);
-    mat3 TBN = inverse(mat3(T,B,N));
+    mat3 TBN = (mat3(T,B,N));
     tangentSpace = TBN;
 }
 </script>
@@ -40,6 +41,7 @@ precision mediump float;
 in vec3 vNormal;
 in vec2 vTexCoord;
 in mat3 tangentSpace;
+in vec3 N;
 
 uniform vec4 aColor;
 uniform sampler2D aTexture;
@@ -53,7 +55,7 @@ void main()
     normal = normal*2.f-1.f;
     normal = normalize(tangentSpace*normal);
     fColor = vec4(normal,1);
-    vec3 lightDir = normalize(-vec3(-0,-1,0));
+    vec3 lightDir = normalize(-vec3(-1,-1,-1));
     float light = dot(normal,lightDir);
     vec4 textureColor = texture(aTexture,vTexCoord);
     fColor = vec4((textureColor.rgb*light),1);

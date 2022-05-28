@@ -12,8 +12,8 @@ class Cube extends mesh{
     genVerticies(){
         for(var x = -1;x<2;x+=2) for(var y = -1;y<2;y+=2) for(var z = -1;z<2;z+=2){
             var vertex = vec4(x,y,z,1);
-            this._vertices.push(mult(this._transform,vertex));
-            //this._vertices.push(vertex);
+            //this._vertices.push(mult(this._transform,vertex));
+            this._vertices.push(vertex);
         }
     }
 
