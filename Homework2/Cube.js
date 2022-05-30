@@ -6,6 +6,8 @@ class Cube extends mesh{
         this.cube();
         this.init(gl,program);
         this.gen_textCoods();
+
+        this.type = "Cube";
     }
 
     //#region Contruct shape

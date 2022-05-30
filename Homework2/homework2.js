@@ -73,8 +73,8 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,-3,-3);
-    //camera.rotate(vec3(1,0,0),90);
+    camera.position= vec3(0,-1,-15);
+    camera.rotate(vec3(1,0,0),-45);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
@@ -282,7 +282,7 @@ function init() {
         var grassPlane = new Entity(gl, program);
         world.addChild(grassPlane);
         grassPlane.mesh = new Plane(gl,program);
-        grassPlane.mesh.scale = vec3(100,0,100);
+        grassPlane.mesh.scale = vec3(100,1,100);
         grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
         //grassPlane.mesh._bumpmap.loadTexture(gl,"./Resources/Textures/download.jpg");
         //grassPlane.rotate(vec3(1,0,0),180);
@@ -326,8 +326,7 @@ function render(event) {
         // captureMouse()
         // moveCamera();
         camera.render();
-        kangaroo.rotate(vec3(0,1,0),1);
-        //world._children[2].rotate(vec3(0,1,0),1)
+        //kangaroo.rotate(vec3(0,1,0),1);
         world.render(gl,program);
         requestAnimationFrame(render);
 }

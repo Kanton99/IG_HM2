@@ -27,6 +27,8 @@ class mesh{
         this._tanBuffer = gl.createBuffer();
         this._tanLoc;
 
+
+        this.type;
     }
 
     
