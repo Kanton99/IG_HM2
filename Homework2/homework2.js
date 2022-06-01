@@ -73,7 +73,7 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 100;
-    camera.position= vec3(0,-1,-15);
+    camera.position= vec3(0,-0,-50);
     camera.rotate(vec3(1,0,0),-45);
     //camera._perspective = false;
 
@@ -282,7 +282,7 @@ function init() {
         var grassPlane = new Entity(gl, program);
         world.addChild(grassPlane);
         grassPlane.mesh = new Plane(gl,program);
-        grassPlane.mesh.scale = vec3(100,1,100);
+        grassPlane.mesh.scale = vec3(10,1,10);
         grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
         //grassPlane.mesh._bumpmap.loadTexture(gl,"./Resources/Textures/download.jpg");
         //grassPlane.rotate(vec3(1,0,0),180);

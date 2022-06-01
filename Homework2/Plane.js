@@ -63,7 +63,7 @@ class Plane extends mesh{
             var c = this._vertices[this._triagles[t][2]];
             var ab = subtract(b,a);
             var ac = subtract(c,a);
-            var normal = negate(normalize(cross(ab,ac)));
+            var normal = (normalize(cross(ab,ac)));
             this._normals.push(normal);
             this._normals.push(normal);
             this._normals.push(normal);

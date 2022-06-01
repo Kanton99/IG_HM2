@@ -58,7 +58,7 @@ void main()
     vec3 lightDir = normalize(-vec3(-1,-1,-1));
     float light = dot(normal,lightDir);
     vec4 textureColor = texture(aTexture,vTexCoord);
-    //fColor = vec4((textureColor.rgb*light),1);
+    fColor = vec4((textureColor.rgb),1);
 }
 </script>
 
