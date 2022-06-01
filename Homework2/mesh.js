@@ -110,9 +110,10 @@ class mesh{
     //#region generation functions
     genNormals(){
         for(var t = 0;t<this._triagles.length;t++){
-            var a = this._vertices[this._triagles[t][0]];
-            var b = this._vertices[this._triagles[t][1]];
-            var c = this._vertices[this._triagles[t][2]];
+            var triangle = this._triagles[t];
+            var a = this._vertices[triangle[0]];
+            var b = this._vertices[triangle[1]];
+            var c = this._vertices[triangle[2]];
             var ab = subtract(b,a);
             var ac = subtract(c,a);
             var normal = (normalize(cross(ab,ac)));

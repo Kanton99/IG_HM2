@@ -19,6 +19,16 @@ class Entity{
         for(var i = 0;i<this._children.length;i++) this._children[i].render();
     }
 
+    rotateAround(angle, axis, point){
+        if(equal(axis,vec3(0,0,0)) || angle == 0) return this.transform;
+        axis = normalize(axis);
+        var translation =  translate(point[0],point[1],point[2]);
+        this.transform = mult(translation,this.transform);
+        var rotation = rotate(angle,axis);
+        this.transform = mult(rotation,this.transform);
+        this.transform = mult(inverse(translation),this.transform);
+    }
+
     //#region Getters and Setters
     get transform(){return this._transform;}
     set transform(m){

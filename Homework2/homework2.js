@@ -65,16 +65,16 @@ function init() {
     //
     program = initShaders( gl, "vertex-shader", "fragment-shader");
 
-    gl.useProgram( program);
+    gl.useProgram(program);
     gl.enable(gl.DEPTH_TEST);
 
     camera = new Camera(gl,program);
     camera.fovy = 60;
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
-    camera.far = 100;
-    camera.position= vec3(0,-0,-50);
-    camera.rotate(vec3(1,0,0),-45);
+    camera.far = 200;
+    camera.position= vec3(0,0,-50);
+    camera.rotate(vec3(1,0,0),-20);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
@@ -276,7 +276,7 @@ function init() {
             }
         }
     }
-    kangaroo.position = vec3(0,3.2,0)
+    kangaroo.position = vec3(20,5,0)
     world.addChild(kangaroo);
     {//#grass plane
         var grassPlane = new Entity(gl, program);
@@ -326,7 +326,7 @@ function render(event) {
         // captureMouse()
         // moveCamera();
         camera.render();
-        //kangaroo.rotate(vec3(0,1,0),1);
+        kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
         world.render(gl,program);
         requestAnimationFrame(render);
 }
