@@ -305,16 +305,16 @@ function init() {
                 oldMouse = mousePos;
                 mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
             });
-            canvas.addEventListener("mouseup",function(event){
+            canvas.addEventListener("mouseup",function(){
                 trakMouse = false;
                 mouseDir = vec2();
                 mousePos = vec2();
                 oldMouse = vec2();
             });
-            canvas.addEventListener("mouseenter",function(event){
+            canvas.addEventListener("mouseenter",function(){
                 mouseIn = true;
             })
-            canvas.addEventListener("mouseleave",function(event){
+            canvas.addEventListener("mouseleave",function(){
                 mouseIn = false;
                 trakMouse = false;
                 mouseDir = vec2();
@@ -336,7 +336,32 @@ function init() {
                 }  
             }
         }
-
+        {//keyboard controls
+            window.onkeydown = function(event){
+                switch(event.key){
+                    case "w":
+                        camera.move(negate(camera.forward));
+                        break;
+                    case "s":
+                        camera.move(camera.forward);
+                        break;
+                    case "a":
+                        camera.move(cross(vec3(0,-1,0),camera.forward));
+                        break;
+                    case "d":
+                        camera.move(cross(vec3(0,1,0),camera.forward));
+                        break;
+                    case " ":
+                        camera.move(vec3(0,1,0));
+                        break;
+                    case "Shift":
+                        camera.move(vec3(0,-1,0));
+                        break;
+                }
+                console.log(event.key)
+                
+            }
+        }
     }
     render();
 }

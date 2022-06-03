@@ -87,6 +87,9 @@ class Entity{
         return normalize(mult(entMatrix,vec3(0,0,1)));
     }
 
+    move(direction){
+        this.transform = mult(translate(direction[0],direction[1],direction[2]),this.transform);
+    }
     //#endregion
 
 }
