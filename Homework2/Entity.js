@@ -73,6 +73,7 @@ class Entity{
     }
 
     rotate(axis, angle){
+        if(angle == 0) return;
         if(axis == vec3(0,0,0)) return;
         this.transform = mult(this.transform,rotate(angle,axis));
     }

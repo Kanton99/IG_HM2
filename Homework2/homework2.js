@@ -38,7 +38,8 @@ var head;
 var tail;
 
 var mousePos = vec2();
-var mouseDir;
+var oldMouse = vec2();
+var mouseDir = vec2();
 var trakMouse = false;
 var mouseIn = false;
 var rect;
@@ -73,11 +74,12 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 200;
-    camera.position= vec3(0,0,-50);
-    camera.rotate(vec3(1,0,0),-20);
+    camera.position= vec3(0,12,50);
+    camera.rotate(vec3(1,0,0),15);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
+    world.addChild(camera);
     {//Build kangaroo
         kangaroo = new Entity(gl, program);
         {//torso
@@ -300,52 +302,55 @@ function init() {
         {//mouse controls
             canvas.addEventListener("mousedown",function(event){
                 trakMouse = true;
+                oldMouse = mousePos;
+                mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
             });
             canvas.addEventListener("mouseup",function(event){
                 trakMouse = false;
+                mouseDir = vec2();
+                mousePos = vec2();
+                oldMouse = vec2();
             });
             canvas.addEventListener("mouseenter",function(event){
                 mouseIn = true;
             })
             canvas.addEventListener("mouseleave",function(event){
                 mouseIn = false;
-                mousePos =vec2();
+                trakMouse = false;
+                mouseDir = vec2();
+                mousePos = vec2();
+                oldMouse = vec2();
             })
+            canvas.onmousemove = function(event){
+                if(trakMouse && mouseIn){
+                    oldMouse = mousePos;
+                    mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
+                    mouseDir = subtract(mousePos,oldMouse);
+                    var invMatrix = inverse(camera.rotationMatrix)
+                    var pitch = camera.fovy * mouseDir[1]/canvas.height;
+                    var yaw = camera.fovy * (1/camera.aspect) * mouseDir[0]/canvas.width;
+                    camera.rotate(vec3(1,0,0),-pitch/(deltaTime*deltaTime));
+                    //camera.rotate(vec3(0,1,0),-yaw/(deltaTime*deltaTime));
+                    //camera.rotate(mult(invMatrix,(vec3(1,0,0))),-pitch/(deltaTime*deltaTime));
+                    camera.rotate(mult(invMatrix,vec3(0,1,0)),-yaw/(deltaTime*deltaTime));
+                }  
+            }
         }
 
     }
     render();
 }
 
-function render(event) {
-        var oldTime = time;
-        var time = Date.now()/1000;
-        deltaTime = time-oldTime;
-        gl.clearColor(0.53,0.8,0.98,1);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        // captureMouse()
-        // moveCamera();
-        camera.render();
-        kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
-        world.render(gl,program);
-        requestAnimationFrame(render);
+var time = Date.now/1000; 
+function render() {
+    var oldTime = time;
+    time = Date.now()/1000;
+    deltaTime = time-oldTime;
+    gl.clearColor(0.53,0.8,0.98,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
+    world.render(gl,program);
+    requestAnimationFrame(render);
 }
 
-function moveCamera(){
-    if(trakMouse && mouseIn){
-        if(length(mouseDir)>0){ 
-            var mouseDir3 = vec3(mouseDir[0],mouseDir[1],0);
-            var cameraForward = camera.forward;
-            var rotAxis = vec3(cross(mouseDir3,cameraForward));
-            camera.rotate(mult(camera.rotationMatrix,rotAxis),length(rotAxis));
-        }
-    }
-}
 
-function captureMouse(){
-    if(trakMouse && mouseIn){
-        var oldMouse = mousePos;
-        mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
-        mouseDir = subtract(mousePos,oldMouse);
-    }  
-}

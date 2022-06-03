@@ -9,10 +9,13 @@ class Camera extends Entity{
     }
 
     render(){
-        this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"modelViewMatrix"), false, flatten((this.transform)));
+        //this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"modelViewMatrix"), false, flatten((this.transform)));
         if(this._perspective) this._projectionMatrix = perspective(this._fovy,this._aspect,this._near,this._far);
         else this._projectionMatrix = ortho(-2,2,-2,2,-10,10);
-        this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"projectionMatrix"), false, flatten((this._projectionMatrix)));
+
+        var invCamMatrix = inverse(this._transform);
+        var viewProjMatrix = mult(this._projectionMatrix,invCamMatrix)
+        this._gl.uniformMatrix4fv(this._gl.getUniformLocation(this._program,"projectionMatrix"), false, flatten(viewProjMatrix));
     }
     //#region Getter and Setters
     get fovy(){return this._fovy;}

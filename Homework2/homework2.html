@@ -13,7 +13,6 @@ in vec2 aTexCoord;
 in vec3 aTangent;
 uniform mat4 objectMatrix;
 
-uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 inverseObjectMatrix;
 
@@ -23,7 +22,7 @@ out mat3 TBN;
 out vec3 N;
 void main()
 {
-    gl_Position = projectionMatrix * modelViewMatrix * objectMatrix *aPosition;
+    gl_Position = projectionMatrix * objectMatrix *aPosition;
     vTexCoord = aTexCoord;
 
     vec3 T = normalize(vec3(objectMatrix * vec4(aTangent,0.f)));
