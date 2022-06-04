@@ -4,6 +4,7 @@ class Entity{
         this._parent;
         this._children = [];
         this._mesh;
+        this._name = "";
 
         this._gl = gl;
         this._program = program;
@@ -19,14 +20,19 @@ class Entity{
         for(var i = 0;i<this._children.length;i++) this._children[i].render();
     }
 
-    rotateAround(angle, axis, point){
+    rotateAround(angle, axis, point,globalSpace = false){
         if(equal(axis,vec3(0,0,0)) || angle == 0) return this.transform;
         axis = normalize(axis);
-        var translation =  translate(point[0],point[1],point[2]);
-        this.transform = mult(translation,this.transform);
-        var rotation = rotate(angle,axis);
-        this.transform = mult(rotation,this.transform);
-        this.transform = mult(inverse(translation),this.transform);
+        if(globalSpace) {
+            var point4 = vec4(point);
+            point = vec3(mult(inverse(this.worldMatrix),point4))
+        }
+        //this.transform = mult(translation,this.transform);
+        this.move(point);
+        var rotation = this.rotate(axis,angle);
+        //this.transform = mult(rotation,this.transform);
+        this.move(negate(point));
+        //this.transform = mult(inverse(translation),this.transform);
     }
 
     //#region Getters and Setters
@@ -69,7 +75,9 @@ class Entity{
     }
     set position(position){
         if(position.type != "vec3") throw "wrong position type";
-        this._transform = mult(translate(position[0],position[1],position[2]),this._transform);
+        this._transform[0][3] = position[0];
+        this._transform[1][3] = position[1];
+        this._transform[2][3] = position[2];
     }
 
     rotate(axis, angle){
@@ -86,6 +94,9 @@ class Entity{
         var entMatrix = this.rotationMatrix;
         return normalize(mult(entMatrix,vec3(0,0,1)));
     }
+
+    get name(){return this._name}
+    set name(name){this._name =name;}
 
     move(direction){
         this.transform = mult(translate(direction[0],direction[1],direction[2]),this.transform);
