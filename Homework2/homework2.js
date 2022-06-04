@@ -327,11 +327,9 @@ function init() {
                     mousePos = vec2((event.x-rect.left)/rect.width,(event.y-rect.top)/rect.height);
                     mouseDir = subtract(mousePos,oldMouse);
                     var invMatrix = inverse(camera.rotationMatrix)
-                    var pitch = camera.fovy * mouseDir[1]/canvas.height;
-                    var yaw = camera.fovy * (1/camera.aspect) * mouseDir[0]/canvas.width;
+                    var pitch = camera.fovy * (1/camera.aspect)  * mouseDir[1]/canvas.height;
+                    var yaw = camera.fovy* mouseDir[0]/canvas.width;
                     camera.rotate(vec3(1,0,0),-pitch/(deltaTime*deltaTime));
-                    //camera.rotate(vec3(0,1,0),-yaw/(deltaTime*deltaTime));
-                    //camera.rotate(mult(invMatrix,(vec3(1,0,0))),-pitch/(deltaTime*deltaTime));
                     camera.rotate(mult(invMatrix,vec3(0,1,0)),-yaw/(deltaTime*deltaTime));
                 }  
             }
