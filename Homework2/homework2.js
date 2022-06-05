@@ -25,11 +25,11 @@ var kangaroo;
 // var rightForeArm;
 
 // var legs;
-// var leftLeg1;
+var leftLeg1;
 // var leftLeg2;
 // var leftLeg3;
 
-// var rightLeg1;
+var rightLeg1;
 // var rightLeg2;
 // var rightLeg3;
 
@@ -78,8 +78,8 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 200;
-    camera.position= vec3(0,0,6);
-    camera.rotate(vec3(0,1,0),90);
+    camera.position= vec3(20,2.5,5);
+    //camera.rotate(vec3(1,0,0),30);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
@@ -147,7 +147,7 @@ function init() {
             legs.position = vec3(0,-2,0);
             torso.addChild(legs);
             {//Left leg1
-                var leftLeg1 = new Entity(gl,program);
+                leftLeg1 = new Entity(gl,program);
                 legs.addChild(leftLeg1);
                 leftLeg1.position = vec3(0.4,0,0);
                 leftLeg1.mesh = new Cube(gl,program);
@@ -177,7 +177,7 @@ function init() {
                 }
             }
             {//right leg1
-                var rightLeg1 = new Entity(gl,program);
+                rightLeg1 = new Entity(gl,program);
                 legs.addChild(rightLeg1);
                 rightLeg1.position = vec3(-0.4,0,0);
                 rightLeg1.mesh = new Cube(gl,program);
@@ -341,6 +341,9 @@ function init() {
                     camera.rotate(mult(invMatrix,vec3(0,1,0)),-yaw/(deltaTime*deltaTime));
                 }  
             }
+            document.getElementById("animation").addEventListener("click",function(){
+                startanimation();
+            });
         }
         {//keyboard controls
             window.onkeydown = function(event){
@@ -372,7 +375,7 @@ function init() {
     t= 0;
     render();
 }
-var animTime = 2;
+var animTime = 1;
 function render() {
     oldTime = time;
     time = Date.now()/1000;
@@ -381,31 +384,30 @@ function render() {
     if(t>animTime) t = 0;
     gl.clearColor(0.53,0.8,0.98,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
-    //kangaroo.position = vec3(20,animation(t)+2,0);
-    //animation(t)
+    //kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
+    animation(t)
     world.render(gl,program);
     requestAnimationFrame(render);
 }
 
 function animation(t){
     //first value is frame/second, second value is the one applied to object
-    var kHeight = new Bezier(vec2(0,0),vec2(0.5,0.5),vec2(0.9,1),vec2(1,1));
-    var kHeight2 = new Bezier(vec2(1,1),vec2(1.1,1),vec2(1.5,0.5),vec2(2,0))
+    var kHeight = new Bezier(vec2(0,0),vec2(0.5,1),vec2(0.5,1),vec2(0.5,1));
+    var kHeight2 = new Bezier(vec2(0.5,1),vec2(0.5,1),vec2(0.5,1),vec2(1,0))
     //return kHeight.at(t<kHeight.d[0]?t:0)[1]+kHeight2.at(t<kHeight2.d[0] && t>=kHeight2.a[0]?(t/(kHeight2.d[0]-kHeight2.a[0]))-kHeight2.a[0]:0)[1];
     var height = 0;
-    if(t<1) {
-        height = kHeight.at(t)[1]
-        kangaroo.position = (vec3(0,height+2,0));
-        kangaroo.move(vec3(20,0,0))
-        kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
+    if(t<kHeight.d[0]) {
+        height = kHeight.at((t-kHeight.a[0])/(kHeight.d[0]-kHeight.a[0]))[1]
     }
     else {
         height = kHeight2.at((t-kHeight2.a[0])/(kHeight2.d[0]-kHeight2.a[0]))[1]
-        kangaroo.position = (vec3(0,height+2,0));
-        kangaroo.move(vec3(20,0,0))
-        kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
     }
+    kangaroo.transform[1][3] = height+2;
+    //kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
 }
 
+function startanimation(){
+    t = 0;
+
+}
 

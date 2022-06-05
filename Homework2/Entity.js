@@ -27,12 +27,11 @@ class Entity{
             var point4 = vec4(point);
             point = vec3(mult(inverse(this.worldMatrix),point4))
         }
-        //this.transform = mult(translation,this.transform);
-        this.move(point);
-        var rotation = this.rotate(axis,angle);
-        //this.transform = mult(rotation,this.transform);
-        this.move(negate(point));
-        //this.transform = mult(inverse(translation),this.transform);
+        var translation = translate(point[0],point[1],point[2])
+        this.transform = mult(translation,this.transform);
+        var rotation = rotate(angle,axis);
+        this.transform = mult(rotation,this.transform);
+        this.transform = mult(inverse(translation),this.transform);
     }
 
     //#region Getters and Setters
@@ -71,7 +70,7 @@ class Entity{
     }
 
     get position(){
-        return vec4(this._transform[3][0],this._transform[3][1],this._transform[3][2],1)
+        return vec4(this._transform[0][3],this._transform[1][3],this._transform[2][3],1)
     }
     set position(position){
         if(position.type != "vec3") throw "wrong position type";
