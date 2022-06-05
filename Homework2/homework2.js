@@ -17,7 +17,7 @@ var camera;
 
 var world;
 var kangaroo;
-
+var kangH = 2;
 // var torso;
 // var leftArm;
 // var leftForeArm;
@@ -49,6 +49,8 @@ var deltaTime;
 var time; 
 var oldTime; 
 var t = 0;
+var animationB  = false;
+var frames = 0;
 
 init();
 
@@ -78,8 +80,8 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 200;
-    camera.position= vec3(20,2.5,5);
-    //camera.rotate(vec3(1,0,0),30);
+    camera.position= vec3(24,2.2,2.3);
+    camera.rotate(vec3(0,1,0),-45);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
@@ -144,6 +146,7 @@ function init() {
         }
         {//Legs
             var legs = new Entity(gl,program);
+            legs.name = "legs";
             legs.position = vec3(0,-2,0);
             torso.addChild(legs);
             {//Left leg1
@@ -341,7 +344,8 @@ function init() {
                     camera.rotate(mult(invMatrix,vec3(0,1,0)),-yaw/(deltaTime*deltaTime));
                 }  
             }
-            document.getElementById("animation").addEventListener("click",function(){
+            var button = document.getElementById("animation");
+            button.addEventListener("click",function(){
                 startanimation();
             });
         }
@@ -373,6 +377,7 @@ function init() {
     }
     time = 0;
     t= 0;
+
     render();
 }
 var animTime = 1;
@@ -385,7 +390,17 @@ function render() {
     gl.clearColor(0.53,0.8,0.98,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     //kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
-    animation(t)
+    if(animationB) {
+        animation(t)
+        frames++;
+        if(frames == 360) {
+            animationB=false
+            kangH=2;
+            kangaroo.transform[1][3] = kangH;
+            rightLeg1.rotation(vec3(1,0,0),170)
+            leftLeg1.rotation(vec3(1,0,0),170)
+        }
+    }
     world.render(gl,program);
     requestAnimationFrame(render);
 }
@@ -402,12 +417,34 @@ function animation(t){
     else {
         height = kHeight2.at((t-kHeight2.a[0])/(kHeight2.d[0]-kHeight2.a[0]))[1]
     }
-    kangaroo.transform[1][3] = height+2;
-    //kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
+    kangaroo.transform[1][3] = height+kangH;
+    kangaroo.rotateAround(1,vec3(0,1,0),vec3(0,0,0));
+
+    var startRotation = vec2(0,140);
+    var endRotation = vec2(0.5,110);
+    var legRotation1 = new Bezier(startRotation,vec2(0.5,140),vec2(0.5,110),endRotation);
+    var legRotation2 = new Bezier(endRotation,vec2(0.75,110),vec2(0.75,140),vec2(1,140));
+
+    var rotation = 0;
+    if(t<legRotation1.d[0]) {
+        rotation = legRotation1.at((t-legRotation1.a[0])/(legRotation1.d[0]-legRotation1.a[0]))[1]
+    }
+    else {
+        rotation = legRotation2.at((t-legRotation2.a[0])/(legRotation2.d[0]-legRotation2.a[0]))[1]
+    }
+    console.log(rotation);
+    rightLeg1.rotation(vec3(1,0,0),rotation);
+    leftLeg1.rotation(vec3(1,0,0),rotation);
+
+
 }
 
 function startanimation(){
     t = 0;
-
+    animationB = true;
+    frames = 0;
+    kangH = 3;
+    // rightLeg1.rotate(vec3(1,0,0),-30)
+    // leftLeg1.rotate(vec3(1,0,0),-60)
 }
 

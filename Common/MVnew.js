@@ -249,9 +249,10 @@ function mat3()
               out[i][j] = arguments[0][i][j];
             }
             break;
-          }
-          for(var i=0; i<3; i++) for(var j=0; j<3; j++) {
-            out[i][j]=arguments[0][3*i+j];
+          }else{
+            for(var i=0; i<3; i++) for(var j=0; j<3; j++) {
+              out[i][j]=arguments[0][3*i+j];
+            }
           }
         break;
 
@@ -289,8 +290,17 @@ function mat4()
       break;
 
     case 1:
-      for(var i=0; i<4; i++) for(var i=0; i<4; i++) {
-        out[i][j]=arguments[0][4*i+j];
+      if(arguments[0].type =="mat3"){
+        for(var i = 0;i<3;i++) for(var j = 0;j<3;j++){
+          out[i][j] = arguments[0][i][j];
+          out[i][3] = 0;
+          out[3][i] = 0;
+        }
+        out[3][3] = 1;
+      }else{
+        for(var i=0; i<4; i++) for(var j=0; j<4; j++) {
+          out[i][j]=arguments[0][4*i+j];
+        }
       }
       break;
 
