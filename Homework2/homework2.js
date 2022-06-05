@@ -80,8 +80,8 @@ function init() {
     camera.aspect = canvas.width/canvas.height;
     camera.near = 0.1;
     camera.far = 200;
-    camera.position= vec3(24,2.2,2.3);
-    camera.rotate(vec3(0,1,0),-45);
+    camera.position= vec3(0,20,40);
+    camera.rotate(vec3(1,0,0),30);
     //camera._perspective = false;
 
     world = new Entity(gl, program);
@@ -406,10 +406,8 @@ function render() {
 }
 
 function animation(t){
-    //first value is frame/second, second value is the one applied to object
     var kHeight = new Bezier(vec2(0,0),vec2(0.5,1),vec2(0.5,1),vec2(0.5,1));
     var kHeight2 = new Bezier(vec2(0.5,1),vec2(0.5,1),vec2(0.5,1),vec2(1,0))
-    //return kHeight.at(t<kHeight.d[0]?t:0)[1]+kHeight2.at(t<kHeight2.d[0] && t>=kHeight2.a[0]?(t/(kHeight2.d[0]-kHeight2.a[0]))-kHeight2.a[0]:0)[1];
     var height = 0;
     if(t<kHeight.d[0]) {
         height = kHeight.at((t-kHeight.a[0])/(kHeight.d[0]-kHeight.a[0]))[1]
@@ -444,7 +442,5 @@ function startanimation(){
     animationB = true;
     frames = 0;
     kangH = 3;
-    // rightLeg1.rotate(vec3(1,0,0),-30)
-    // leftLeg1.rotate(vec3(1,0,0),-60)
 }
 
