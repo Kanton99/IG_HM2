@@ -18,24 +18,9 @@ var camera;
 var world;
 var kangaroo;
 var kangH = 2;
-// var torso;
-// var leftArm;
-// var leftForeArm;
-// var rightArm;
-// var rightForeArm;
 
-// var legs;
 var leftLeg1;
-// var leftLeg2;
-// var leftLeg3;
-
 var rightLeg1;
-// var rightLeg2;
-// var rightLeg3;
-
-// var head;
-
-// var tail;
 
 var mousePos = vec2();
 var oldMouse = vec2();
@@ -82,7 +67,6 @@ function init() {
     camera.far = 200;
     camera.position= vec3(0,20,40);
     camera.rotate(vec3(1,0,0),30);
-    //camera._perspective = false;
 
     world = new Entity(gl, program);
     world.addChild(camera);
@@ -299,15 +283,6 @@ function init() {
         grassPlane.mesh._texture.loadTexture(gl,"./Resources/Textures/grass.jpg");
         //grassPlane.mesh._bumpmap.loadTexture(gl,"./Resources/Textures/download.jpg");
         //grassPlane.rotate(vec3(1,0,0),180);
-    }
-    {//debug cube
-    var debug = new Entity(gl,program);
-    debug.mesh = new Cube(gl, program);
-    //world.addChild(debug);
-    debug.position = vec3(0,3,0);
-    debug.rotate(vec3(0,1,0),90);
-    debug.rotate(vec3(0,0,1),90);
-    debug.mesh._texture.loadTexture(gl,"./Resources/Textures/download.jpg")
     }
     {//Events
         {//mouse controls
